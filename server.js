@@ -134,6 +134,30 @@ app.post("/create-quote-order", async (req, res) => {
             const customerData =
                 await customerResponse.json();
 
+            console.log(
+                "CUSTOMER RESPONSE:",
+                customerData
+            );
+
+            // ========================================
+            // CUSTOMER CREATE FAILED
+            // ========================================
+
+            if (
+                !customerData.customer
+            ) {
+
+                return res.status(500).json({
+
+                    success: false,
+
+                    error:
+                        customerData
+
+                });
+
+            }
+
             customerId =
                 customerData.customer.id;
 
