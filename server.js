@@ -16,7 +16,7 @@ const SHOP =
 const ACCESS_TOKEN =
     process.env.SHOPIFY_ACCESS_TOKEN;
 
-const API_VERSION = "2026-04";
+const API_VERSION = "2025-01";
 
 // ========================================
 // TEST ROUTE
@@ -65,6 +65,11 @@ app.post("/create-quote-order", async (req, res) => {
 
         const searchData =
             await searchResponse.json();
+
+        console.log(
+            "SEARCH RESPONSE:",
+            searchData
+        );
 
         // ========================================
         // EXISTING CUSTOMER
@@ -245,6 +250,11 @@ app.post("/create-quote-order", async (req, res) => {
 
         const draftOrderData =
             await draftOrderResponse.json();
+
+        console.log(
+            "DRAFT ORDER RESPONSE:",
+            draftOrderData
+        );
 
         // ========================================
         // SUCCESS
