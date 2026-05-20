@@ -13,8 +13,83 @@ app.use(express.json());
 const SHOP =
     "m1un02-nm.myshopify.com";
 
-const ACCESS_TOKEN =
-    process.env.SHOPIFY_ACCESS_TOKEN;
+const CLIENT_ID =
+    process.env.SHOPIFY_CLIENT_ID;
+
+const CLIENT_SECRET =
+    process.env.SHOPIFY_CLIENT_SECRET;
+
+let accessToken = null;
+let tokenExpiresAt = 0;
+
+// ========================================
+// GET ACCESS TOKEN
+// ========================================
+
+async function getAccessToken() {
+
+    // reuse token if still valid
+    if (
+        accessToken &&
+        Date.now() < tokenExpiresAt - 60000
+    ) {
+        return accessToken;
+    }
+
+    const response = await fetch(
+
+        `https://${SHOP}.myshopify.com/admin/oauth/access_token`,
+
+        {
+
+            method: "POST",
+
+            headers: {
+                "Content-Type":
+                    "application/x-www-form-urlencoded"
+            },
+
+            body: new URLSearchParams({
+
+                grant_type:
+                    "client_credentials",
+
+                client_id:
+                    CLIENT_ID,
+
+                client_secret:
+                    CLIENT_SECRET
+
+            })
+
+        }
+
+    );
+
+    const data =
+        await response.json();
+
+    console.log("TOKEN RESPONSE:", data);
+
+    if (!response.ok) {
+
+        throw new Error(
+            JSON.stringify(data)
+        );
+
+    }
+
+    accessToken =
+        data.access_token;
+
+    tokenExpiresAt =
+        Date.now() + (
+            data.expires_in * 1000
+        );
+
+    return accessToken;
+
+}
 
 const API_VERSION = "2025-01";
 
@@ -54,7 +129,7 @@ app.post("/create-quote-order", async (req, res) => {
             {
                 headers: {
                     "X-Shopify-Access-Token":
-                        ACCESS_TOKEN,
+                        await getAccessToken(),
 
                     "Content-Type":
                         "application/json"
@@ -97,7 +172,7 @@ app.post("/create-quote-order", async (req, res) => {
                         headers: {
 
                             "X-Shopify-Access-Token":
-                                ACCESS_TOKEN,
+                                await getAccessToken(),
 
                             "Content-Type":
                                 "application/json"
@@ -215,7 +290,7 @@ app.post("/create-quote-order", async (req, res) => {
                     headers: {
 
                         "X-Shopify-Access-Token":
-                            ACCESS_TOKEN,
+                            await getAccessToken(),
 
                         "Content-Type":
                             "application/json"
