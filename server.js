@@ -11,7 +11,7 @@ app.use(express.json());
 // ========================================
 
 const SHOP =
-    "m1un02-nm.myshopify.com";
+    "m1un02-nm";
 
 const CLIENT_ID =
     process.env.SHOPIFY_CLIENT_ID;
