@@ -235,12 +235,15 @@ app.post("/create-quote-order", async (req, res) => {
                                 id: customerId
                             },
 
+                            use_customer_default_address: true,
+
+                            email:
+                                customer.email,
+
                             note:
                                 customer.notes,
 
                             line_items
-
-                            use_customer_default_address: true,
 
                         }
 
