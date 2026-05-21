@@ -264,6 +264,11 @@ app.post("/create-quote-order", async (req, res) => {
 
             success: true,
 
+            invoiceUrl:
+                draftOrderData
+                    .draft_order
+                    .invoice_url,
+
             order:
                 draftOrderData
 
