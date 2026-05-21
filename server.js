@@ -240,6 +240,8 @@ app.post("/create-quote-order", async (req, res) => {
 
                             line_items
 
+                            use_customer_default_address: true,
+
                         }
 
                     })
